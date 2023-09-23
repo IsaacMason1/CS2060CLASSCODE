@@ -1,33 +1,42 @@
 #include <stdio.h>
 
-// Constants for rental property information
+// Constants for rental property information 
 int const SENTINEL_NEG1 = -1;
-unsigned int const MIN_RENTAL_NIGHTS = 1;
+unsigned int const MIN_RENTAL_NIGHTS = 1;/*The difference between unsigned int const and signed int 
+const lies in the range of values they can represent and how they handle negative and positive numbers:
+    Unsigned int is an integer data type that represents non-negative whole numbers.It cannot represent negative numbers.
+        Signed int is an integer data type that can represent both positive and negative whole numbers.
+*/
 unsigned int const MAX_RENTAL_NIGHTS = 14;
 unsigned int const INTERVAL_1_NIGHTS = 3;
 unsigned int const INTERVAL_2_NIGHTS = 6;
 double const RENTAL_RATE = 400.00;
 double const DISCOUNT = 50.00;
 
-// Function prototypes
+// Function prototypes - they kind of act as an interface from java
 void printRentalPropertyInfo(unsigned int minNights, unsigned int maxNights, unsigned int interval1Nights, unsigned int interval2Nights, double rate, double discount);
 int getValidInt(int min, int max, int sentinel);
 double calculateCharges(unsigned int nights, unsigned int interval1Nights, unsigned int interval2Nights, double rate, double discount);
 void printNightsCharges(unsigned int nights, double charges);
 
 int main() {
-    // Print rental property information
+    /*Print rental property information - printRentalPropertyInfo() under main will be used to
+    print out the desired strings */
     printRentalPropertyInfo(MIN_RENTAL_NIGHTS, MAX_RENTAL_NIGHTS, INTERVAL_1_NIGHTS, INTERVAL_2_NIGHTS, RENTAL_RATE, DISCOUNT);
 
-    // Get the number of nights from the user
+    /* Get the number of nights from the user - getValidInt() under main will be used to find a vaild int
+     that fits the assaignment details, this is also where i will make sure that the code will not 
+     stop running fro some random reason such as a -1 or 000 being entered. */
     int nights = getValidInt(MIN_RENTAL_NIGHTS, MAX_RENTAL_NIGHTS, SENTINEL_NEG1);
 
+    //-1 is used as a sentinel value to signal that there were no rentals when input by the user.
     if (nights != SENTINEL_NEG1) {
         // Calculate charges and print results
         double charges = calculateCharges(nights, INTERVAL_1_NIGHTS, INTERVAL_2_NIGHTS, RENTAL_RATE, DISCOUNT);
         printNightsCharges(nights, charges);
+   //more info about calc charges down bellow
     } else {
-        printf("There were no rentals.\n");
+        printf("There were no rentals.\n");//should only ever print this is -1 is entered
     }
 
     return 0;
@@ -64,11 +73,11 @@ int getValidInt(int min, int max, int sentinel) {
 
 double calculateCharges(unsigned int nights, unsigned int interval1Nights, unsigned int interval2Nights, double rate, double discount) {
     double totalCharge = 0.0;
-    if (nights <= interval1Nights) {
+    if (nights <= interval1Nights) { //this is the base pay without any discounts being added
         totalCharge = rate * nights;
-    } else if (nights <= interval2Nights) {
+    } else if (nights <= interval2Nights) { // this is for the 50$ disount for nights 4 to 6
         totalCharge = (rate * interval1Nights) + ((nights - interval1Nights) * (rate - discount));
-    } else {
+    } else { //and this is with the 100$ discount after night 6
         totalCharge = (rate * interval1Nights) + ((interval2Nights - interval1Nights) * (rate - discount)) + ((nights - interval2Nights) * (rate - discount * 2));
     }
     return totalCharge;
