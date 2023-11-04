@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stdbool.h>
 // Constants for rental property information
 unsigned int const MIN_RENTAL_NIGHTS = 1;/*The difference between unsigned int const and signed int
 const lies in the range of values they can represent and how they handle negative and positive numbers:
@@ -18,7 +18,7 @@ void printRentalPropertyInfo(unsigned int minNights, unsigned int maxNights, uns
 int getValidInt(int min, int max);
 double calculateCharges(unsigned int nights, unsigned int interval1Nights, unsigned int interval2Nights, double rate, double discount);
 void printNightsCharges(unsigned int nights, double charges);
-
+bool shouldContune = true;
 int main() { 
     unsigned int totalNights = 0;
     double totalCharges = 0.0;
@@ -29,7 +29,7 @@ int main() {
 
     printRentalPropertyInfo(MIN_RENTAL_NIGHTS, MAX_RENTAL_NIGHTS, INTERVAL_1_NIGHTS, INTERVAL_2_NIGHTS, RENTAL_RATE, DISCOUNT);
 
-    while (1) {
+    while (shouldContune) {
            /* Get the number of nights from the user - getValidInt() under main will be used to find a vaild int
      that fits the assaignment details, this is also where i will make sure that the code will not
      stop running fro some random reason such as a -1 or 000 being entered. */
@@ -39,10 +39,10 @@ int main() {
         if (isFirstInput && nights == -1) {
             // Handles the first input being -1 if first input is -1
             printf("There were no rentals.\n");
-            break;//gets out of the while loop if -1 is entered
+            shouldContune = false;
         }
-
-        isFirstInput = 0; /* Set the flag to false after the first input, the flag willkeep track of whether this is the first input entered.
+        else{
+            isFirstInput = 0; /* Set the flag to false after the first input, the flag willkeep track of whether this is the first input entered.
             If the first input is -1, the program will immediately display "There were no rentals" and exit the loop.
             After the first input, the isFirstInput flag is set to 0 (false), so the program will not consider -1 
             as a special case sense it will no longer be entered first 
@@ -51,10 +51,10 @@ int main() {
         if (nights == -1) {
             // Print the total nights and charges when -1 is entered from every entree while the while loop was running
             printf("\nTotal Nights: %u\nTotal Charges: $%.2lf\n", totalNights, totalCharges);
-            break;
+            shouldContune = false;
         }
-
-        // Calculate charges and print results
+        else{
+            // Calculate charges and print results
         double charges = calculateCharges(nights, INTERVAL_1_NIGHTS, INTERVAL_2_NIGHTS, RENTAL_RATE, DISCOUNT);
         printNightsCharges(nights, charges);
 
@@ -63,8 +63,16 @@ int main() {
         totalCharges += charges;
     }
 
+        }
+        
     return 0;
 }
+}
+        
+
+        
+
+       
 
 void printRentalPropertyInfo(unsigned int minNights, unsigned int maxNights, unsigned int interval1Nights, unsigned int interval2Nights, double rate, double discount) {
     printf("Rental Property can be rented for %u to %u nights.\n", minNights, maxNights);
